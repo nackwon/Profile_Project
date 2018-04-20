@@ -75,7 +75,7 @@ public class MemberDAO {
 	}
 
 	// 회원수정
-	public MemberVO UpdateUser(MemberVO vo, int no) {
+	public void UpdateUser(MemberVO vo, int no) {
 		ConnectionManager mgr = new ConnectionManager();
 		Connection con = mgr.getConnection();
 		PreparedStatement pstmt = null;
@@ -97,6 +97,5 @@ public class MemberDAO {
 		} finally {
 			mgr.ConnectionClose(con, pstmt, rs);
 		}
-		return vo;
 	}
 }

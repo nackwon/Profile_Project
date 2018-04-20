@@ -1,10 +1,5 @@
 <%@page import="kr.co.jimmy.VO.MemberVO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%
-	MemberVO vo = (MemberVO) session.getAttribute("authUser");
-	System.out.print(vo.getNo());
-	//실제로 vo에는 주소값이 담겨있다
-%>
 
 <!DOCTYPE html>
 <html>
@@ -28,7 +23,7 @@
 	
 					<form id="join-form" name="joinForm" method="get" action="">
 					<input type="hidden" name="cmd" value="update">
-					<input type="hidden" name="no" value="<%=vo.getNo() %>">
+					<input type="hidden" name="no" value="${sessionScope.authUser.no}">
 						<label class="block-label" for="name">이름</label>
 						<input id="name" name="name" type="text" value="" />
 	

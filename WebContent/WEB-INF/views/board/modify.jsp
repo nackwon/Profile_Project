@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -18,20 +17,20 @@
 		
 		<div id="content">
 			<div id="board">
-				<form class="board-form" method="post" action="">
-					<input type="hidden" name="cmd" value="update">
+				<form class="board-form" method="post" action="/mysite/board?cmd=update">
+					<input type="hidden" name="no" value="${requestScope.modifyVo.number}">
 					<table class="tbl-ex">
 						<tr>
 							<th colspan="2">글수정</th>
 						</tr>
 						<tr>
 							<td class="label">제목</td>
-							<td><input type="text" name="title" value=""></td>
+							<td><input type="text" name="title" value="${requestScope.modifyVo.title}"></td>
 						</tr>
 						<tr>
 							<td class="label">내용</td>
 							<td>
-								<textarea id="content" name="content"> </textarea>
+								<textarea id="content" name="content">${requestScope.modifyVo.content}</textarea>
 							</td>
 						</tr>
 					</table>

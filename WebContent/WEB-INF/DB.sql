@@ -67,6 +67,10 @@ CREATE SEQUENCE seq_board_no
 INCREMENT BY 1
 START WITH 1
 NOCACHE;
+SELECT *  FROM board;
+DELETE FROM board WHERE no LIKE 3;
+SELECT user_no FROM board WHERE board.user_no =
+(SELECT no FROM users WHERE users.no = 9);
 // Board end//
 
 // GuestBook start //

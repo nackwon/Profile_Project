@@ -1,15 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
-<%
-	String result = request.getParameter("result");
-%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<link href="/mysite/assets/css/user.css" rel="stylesheet" type="text/css">
 	<link href="/mysite/assets/css/mysite.css" rel="stylesheet" type="text/css">
-	<title>Insert title here</title>
+	<title>Login Form</title>
 </head>
 <body>
 
@@ -32,9 +29,9 @@
 						<label class="block-label">패스워드</label> 
 						<input name="password" type="password" value="">
 							
-							<%if("fail".equals(result)) { %>
+							<c:if test="${param.result != null }">
 								<P>로그인이 실패했습니다. 다시입력해주세요</P>
-							<%} %>
+							</c:if>
 	
 						<input type="submit" value="로그인">
 					</form>

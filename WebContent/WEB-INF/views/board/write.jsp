@@ -1,9 +1,7 @@
-<%@page import="kr.co.jimmy.VO.MemberVO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%
-	MemberVO vo = (MemberVO) session.getAttribute("authUser");
-%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -25,7 +23,7 @@
 			<div id="board">
 				<form class="board-form" method="post" action="/mysite/board">
 					<input type="hidden" name="cmd" value="write"> 
-					<input type="hidden" name="no" value="<%=vo.getNo()%>">
+					<input type="hidden" name="no" value="${sessionScope.authUser.no}">
 					<table class="tbl-ex">
 						<tr>
 							<th colspan="2">글쓰기</th>
