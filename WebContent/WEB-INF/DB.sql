@@ -11,6 +11,7 @@ create table users (
   gender  varchar2(10),
   primary key(no)
 );
+
 UPDATE users SET name = '낙원', password = '12345', gender = 'female' WHERE no LIKE 11;
 SELECT name, no FROM users WHERE email LIKE 'test' AND password LIKE 'test';
 DELETE FROM users WHERE no LIKE 6;
@@ -47,6 +48,7 @@ where no = 4;
 // member end//
 
 // Board start//
+DROP TABLE board;
 CREATE TABLE board(
 	no number,
 	title VARCHAR2(500),
@@ -68,9 +70,25 @@ INCREMENT BY 1
 START WITH 1
 NOCACHE;
 SELECT *  FROM board;
-DELETE FROM board WHERE no LIKE 3;
-SELECT user_no FROM board WHERE board.user_no =
-(SELECT no FROM users WHERE users.no = 9);
+SELECT b.no, b.title, u.name, b.hit, b.reg_date, b.user_no
+FROM board b, users u
+WHERE u.no = b.user_no
+ORDER BY b.no DESC;
+
+SELECT b.title, b.content, b.no
+FROM board b, users u
+WHERE u.no = 13 AND b.user_no = 9;
+SELECT name
+FROM users
+WHERE
+
+SELECT b.no, b.title, u.name, b.hit, b.reg_date
+FROM board b, users u
+WHERE b.title LIKE 'eee';
+
+SELECT b.no, b.title, b.hit, b.reg_date
+FROM board b
+WHERE b.title LIKE 'eee';
 // Board end//
 
 // GuestBook start //

@@ -14,6 +14,15 @@ public class BoardVO {
 	private int hit;
 	private String reg_date;
 	private int user_no;
+	private String user_name;
+
+	public String getUser_name() {
+		return user_name;
+	}
+
+	public void setUser_name(String user_name) {
+		this.user_name = user_name;
+	}
 
 	public int getNumber() {
 		return number;
@@ -62,5 +71,5 @@ public class BoardVO {
 	public void setUser_no(int user_no) {
 		this.user_no = user_no;
 	}
-	
+
 }

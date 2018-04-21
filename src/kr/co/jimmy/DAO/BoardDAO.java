@@ -17,7 +17,7 @@ public class BoardDAO {
 		Connection con = mgr.getConnection();
 		PreparedStatement pstmt = null;
 
-		String sql = "INSERT INTO board VALUES (seq_board_no.nextval, ?,?,0,sysdate,?)";
+		String sql = "INSERT INTO board VALUES (seq_board_no.nextval,?,?,0,sysdate,?)";
 
 		try {
 			pstmt = con.prepareStatement(sql);
@@ -44,7 +44,10 @@ public class BoardDAO {
 		ResultSet rs = null;
 		BoardVO vo = null;
 
-		String sql = "SELECT no, title, user_no, hit, reg_date FROM board";
+		String sql = "SELECT b.no, b.title, u.name, b.hit, b.reg_date, b.user_no "
+					+ "FROM board b, users u "
+					+ "WHERE u.no = b.user_no "
+					+ "ORDER BY b.no DESC";
 
 		try {
 			pstmt = con.prepareStatement(sql);
@@ -55,11 +58,10 @@ public class BoardDAO {
 				vo = new BoardVO();
 				vo.setNumber(rs.getInt("no"));
 				vo.setTitle(rs.getString("title"));
-				vo.setUser_no(rs.getInt("user_no"));
-				int hit = rs.getInt("hit");
-				vo.setHit(hit);
+				vo.setUser_name(rs.getString("name"));
+				vo.setHit(rs.getInt("hit"));
 				vo.setReg_date(rs.getString("reg_date"));
-
+				vo.setUser_no(rs.getInt("user_no"));
 				list.add(vo);
 			}
 		} catch (SQLException e) {
@@ -102,7 +104,7 @@ public class BoardDAO {
 	}
 	
 	// 게시판 보기
-	public BoardVO SelectBoard(String no) {
+	public BoardVO SelectBoard(int no) {
 		ConnectionManager mgr = new ConnectionManager();
 		Connection con = mgr.getConnection();
 		PreparedStatement pstmt = null;
@@ -112,7 +114,7 @@ public class BoardDAO {
 
 		try {
 			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, no);
+			pstmt.setInt(1, no);
 			rs = pstmt.executeQuery();
 
 			if (rs.next()) {
@@ -134,29 +136,25 @@ public class BoardDAO {
 	}
 
 	// 게시판 수정 가능 체크
-	public int isCheckBoard(int no) {
+	public int isCheckBoard(int no, int user_no) {
 		ConnectionManager mgr = new ConnectionManager();
 		Connection con = mgr.getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 
 		String sql = "SELECT user_no "
-				   + "FROM board WHERE board.user_no = ("
-				   	+ "SELECT no "
-				   	+ "FROM users "
-				   	+ "WHERE users.no = ?)";
+					+ "FROM board "
+					+ "WHERE user_no LIKE ?";
 
 		try {
 			pstmt = con.prepareStatement(sql);
-			pstmt.setInt(1, no);
+			pstmt.setInt(1, user_no);
+			
 			rs = pstmt.executeQuery();
 
 			if (rs.next()) {
-				if(rs.getInt("user_no") == no) {
-					System.out.println(no);
-					System.out.println(rs.getInt("user_no"));
+				if(rs.getInt("user_no") == no)
 					return 1;
-				}
 			}
 
 		} catch (SQLException e) {
@@ -219,7 +217,9 @@ public class BoardDAO {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		BoardVO vo = null;
-		String sql = "SELECT no, title, user_no, hit, reg_date FROM board WHERE title LIKE ?";
+		String sql = "SELECT b.no, b.title, u.name, b.hit, b.reg_date "
+				+ "FROM board b, users u "
+				+ "WHERE b.title LIKE ?";
 		
 		try {
 			pstmt = con.prepareStatement(sql);
@@ -232,7 +232,7 @@ public class BoardDAO {
 				
 				vo.setNumber(rs.getInt("no"));
 				vo.setTitle(rs.getString("title"));
-				vo.setUser_no(rs.getInt("user_no"));
+				vo.setUser_name(rs.getString("name"));
 				vo.setHit(rs.getInt("hit"));
 				vo.setReg_date(rs.getString("reg_date"));
 

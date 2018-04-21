@@ -21,7 +21,7 @@
 
 		<div id="content">
 			<div id="board">
-				<form id="search_form" action="" method="post">
+				<form id="search_form" action="" method="get">
 					<input type="hidden" name="cmd" value="search">
 					<input type="text" name="kwd" value="">
 					<input type="submit" value="찾기">
@@ -35,15 +35,14 @@
 						<th>작성일</th>
 						<th>&nbsp;</th>
 					</tr>
-					<c:forEach items="${boardList }" var="boardList" varStatus="status">
+					<c:forEach items="${boardList}" var="boardList" varStatus="status">
 						<tr>
 						<td>${boardList.number}</td>
-						<td><a
-							href="/mysite/board?cmd=updateView&no=${boardList.number }">${boardList.title}</a></td>
-						<td>${boardList.user_no}</td>
+						<td><a href="/mysite/board?cmd=updateView&no=${boardList.number}">${boardList.title}</a></td>
+						<td>${boardList.user_name}</td>
 						<td>${boardList.hit}</td>
 						<td>${boardList.reg_date}</td>
-						<td><a href="/mysite/board?cmd=delete&no=${boardList.number}" class="del">삭제</a></td>
+						<td><a href="/mysite/board?cmd=delete&use_no=${boardList.user_no}&no=${boardList.number}" class="del">삭제</a></td>
 					</tr>
 					</c:forEach>
 				</table>

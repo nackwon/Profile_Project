@@ -42,7 +42,7 @@ public class BoardController extends HttpServlet {
 			BoardDAO dao = new BoardDAO();
 			ArrayList<BoardVO> list = dao.SearchBoard(kwd);
 
-			request.setAttribute("list", list);
+			request.setAttribute("boardList", list);
 
 			url = "/WEB-INF/views/board/list.jsp";
 			RequestDispatcher rd = request.getRequestDispatcher(url);
@@ -70,13 +70,12 @@ public class BoardController extends HttpServlet {
 				url = "/mysite/user?cmd=loginform";
 				response.sendRedirect(url);
 			} else {
+				
+				int use_no = Integer.parseInt(request.getParameter("use_no"));
 				int user_no = member.getNo();
-
-				int count = dao.isCheckBoard(user_no);
-				System.out.println(count);
+				int count = dao.isCheckBoard(user_no, use_no);
 				if (count == 1) {
 					int no = Integer.parseInt(request.getParameter("no"));
-					System.out.println(no);
 					dao.DeleteBoard(no);
 
 					url = "/mysite/board";
@@ -90,7 +89,7 @@ public class BoardController extends HttpServlet {
 		} else if ("updateView".equals(cmd)) {
 
 			BoardDAO dao = new BoardDAO();
-			String no = request.getParameter("no");
+			int no = Integer.parseInt(request.getParameter("no"));
 			BoardVO vo = dao.SelectBoard(no);
 	
 			request.setAttribute("updateVo", vo);
@@ -108,12 +107,13 @@ public class BoardController extends HttpServlet {
 				response.sendRedirect(url);
 			} else {
 				String content_no = request.getParameter("content_no");
+				int no = Integer.parseInt(request.getParameter("no"));
 				int user_no = member.getNo();
-
-				int count = dao.isCheckBoard(user_no);
+				
+				int count = dao.isCheckBoard(user_no, no);
 
 				if (count == 1) {
-					String no = request.getParameter("no");
+					
 					BoardVO vo = dao.SelectBoard(no);
 
 					request.setAttribute("modifyVo", vo);

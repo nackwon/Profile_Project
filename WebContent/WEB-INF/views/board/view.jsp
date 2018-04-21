@@ -30,7 +30,7 @@
 						<td class="label">내용</td>
 						<td>
 							<div class="view-content">
-								${requestScope.updateVo.content }
+								${requestScope.updateVo.content}
 							</div>
 						</td>
 					</tr>
