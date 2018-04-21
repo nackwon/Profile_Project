@@ -78,13 +78,10 @@ ORDER BY b.no DESC;
 SELECT b.title, b.content, b.no
 FROM board b, users u
 WHERE u.no = 13 AND b.user_no = 9;
-SELECT name
-FROM users
-WHERE
-
-SELECT b.no, b.title, u.name, b.hit, b.reg_date
-FROM board b, users u
-WHERE b.title LIKE 'eee';
+SELECT u.name, b.title
+FROM users u, board b
+WHERE u.no = b.user_no
+AND b.title = 'eee';
 
 SELECT b.no, b.title, b.hit, b.reg_date
 FROM board b

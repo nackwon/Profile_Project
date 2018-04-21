@@ -126,7 +126,6 @@ public class BoardController extends HttpServlet {
 				}
 			}
 		} else if ("update".equals(cmd)) {
-			System.out.println("들어옴");
 			BoardDAO dao = new BoardDAO();
 			BoardVO vo = new BoardVO();
 			String title = request.getParameter("title");

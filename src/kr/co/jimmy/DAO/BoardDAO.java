@@ -219,7 +219,8 @@ public class BoardDAO {
 		BoardVO vo = null;
 		String sql = "SELECT b.no, b.title, u.name, b.hit, b.reg_date "
 				+ "FROM board b, users u "
-				+ "WHERE b.title LIKE ?";
+				+ "WHERE b.user_no = u.no "
+				+ "AND b.title LIKE ?";
 		
 		try {
 			pstmt = con.prepareStatement(sql);
