@@ -61,15 +61,15 @@ CREATE TABLE board(
 	REFERENCES users(no)
 );
 
-INSERT INTO board(seq_board_no.nextval, '안녕','안녕하세요',3,sysdate,SELECT e.no, b.user_no
-FROM member e, board b
-WHERE e.no = b.user_no);
+INSERT INTO board VALUES (seq_board_no.nextval,'hello','hello!',0,sysdate,9);
 
 CREATE SEQUENCE seq_board_no
 INCREMENT BY 1
 START WITH 1
 NOCACHE;
+
 SELECT *  FROM board;
+
 SELECT b.no, b.title, u.name, b.hit, b.reg_date, b.user_no
 FROM board b, users u
 WHERE u.no = b.user_no
@@ -86,6 +86,9 @@ AND b.title = 'eee';
 SELECT b.no, b.title, b.hit, b.reg_date
 FROM board b
 WHERE b.title LIKE 'eee';
+
+UPDATE board SET hit = nvl(hit,0)+1 WHERE no LIKE 43;
+SELECT count(*) FROM board;
 // Board end//
 
 // GuestBook start //

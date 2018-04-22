@@ -224,7 +224,7 @@ public class BoardDAO {
 		
 		try {
 			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, title);
+			pstmt.setString(1, "%"+title+"%");
 			rs = pstmt.executeQuery();
 			list = new ArrayList<BoardVO>();
 			
@@ -242,7 +242,53 @@ public class BoardDAO {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			mgr.ConnectionClose(con, pstmt, rs);
 		}
 		return list; 
+	}
+	
+	//조회수 
+	public void HitBoard(int no) {
+		ConnectionManager mgr = new ConnectionManager();
+		Connection con = mgr.getConnection();
+		PreparedStatement pstmt = null;
+		
+		String sql = "UPDATE board SET hit = nvl(hit,0)+1 WHERE no LIKE ?";
+		
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, no);
+			pstmt.executeQuery();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			mgr.ConnectionClose(con, pstmt, null);
+		}
+	}
+	
+	//페이징 처리
+	public int PagingBoard() {
+		ConnectionManager mgr = new ConnectionManager();
+		Connection con = mgr.getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = "SELECT count(*) FROM board";
+		
+		try {
+			pstmt = con.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				return rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return 0;
 	}
 }

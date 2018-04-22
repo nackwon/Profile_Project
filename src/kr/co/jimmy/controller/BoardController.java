@@ -91,7 +91,7 @@ public class BoardController extends HttpServlet {
 			BoardDAO dao = new BoardDAO();
 			int no = Integer.parseInt(request.getParameter("no"));
 			BoardVO vo = dao.SelectBoard(no);
-	
+			dao.HitBoard(no);
 			request.setAttribute("updateVo", vo);
 			url = "/WEB-INF/views/board/view.jsp";
 			RequestDispatcher rd = request.getRequestDispatcher(url);
@@ -148,8 +148,9 @@ public class BoardController extends HttpServlet {
 			
 			ArrayList<BoardVO> list = dao.ListBoard();
 			
+			request.setAttribute("defaultPage", 2);
 			request.setAttribute("boardList", list);
-
+			
 			url = "/WEB-INF/views/board/list.jsp";
 			RequestDispatcher rd = request.getRequestDispatcher(url);
 			rd.forward(request, response);

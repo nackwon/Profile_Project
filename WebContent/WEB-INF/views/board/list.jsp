@@ -1,7 +1,36 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ page import="kr.co.jimmy.DAO.BoardDAO" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>​
+<%
+	BoardDAO dao = new BoardDAO();
+	int totalCount = dao.PagingBoard();
+	int listCount = 5; // BLOCK
+	int defaultPage = 1; // 현재 페이지
+	int totalPage = totalCount / listCount; // 총 페이지  수
+	
+	if(totalCount % listCount > 0){
+		totalPage ++;
+	} // 총 페이지 수 
+	
+	if(totalPage < defaultPage){
+		defaultPage = totalPage;
+	} // 
+	
+	int startPage = ((defaultPage -1) / listCount) * listCount + 1;
+	int endPage = startPage + listCount - 1;
+	
+	if(endPage > totalPage){
+		endPage = totalPage;
+	}
+	
+	if(request.getParameter("defaultPage") != null)
+		defaultPage = Integer.parseInt(request.getParameter("defaultPage"));
+	
+	System.out.println(startPage+"startPage");
+	System.out.println(endPage+"endPage");
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -42,20 +71,46 @@
 						<td>${boardList.user_name}</td>
 						<td>${boardList.hit}</td>
 						<td>${boardList.reg_date}</td>
-						<td><a href="/mysite/board?cmd=delete&use_no=${boardList.user_no}&no=${boardList.number}" class="del">삭제</a></td>
+						<c:choose>
+							<c:when test="${sessionScope.authUser != null && sessionScope.authUser.no == boardList.user_no }">
+								<td><a href="/mysite/board?cmd=delete&use_no=${boardList.user_no}&no=${boardList.number}" class="del">삭제</a></td>
+							</c:when>
+							<c:otherwise>
+								<td></td>
+							</c:otherwise>
+						</c:choose>
+						<c:if test="">
+						</c:if>
 					</tr>
 					</c:forEach>
 				</table>
 				<div class="pager">
 					<ul>
-						<li><a href="">◀</a></li>
-
-						<li><a href="">1</a></li>
-						<li><a href="">2</a></li>
-						<li class="selected">3</li>
-						<li><a href="">4</a></li>
-						<li>5</li>
-						<li><a href="">▶</a></li>
+					<%
+						if(totalPage > 5){
+					%>
+						<li><a href="mysite/board?defaultPage=<%=startPage-1%>">◀</a></li>
+					<%
+						}
+					
+						for(int i=startPage; i<endPage+1; i++){
+							
+							if(i == defaultPage){
+					%>
+						<li class="selected"><a href=""><%=i %></a></li>
+					<%
+						}else{
+					%>
+						<li><a href=""><%=i %></a>
+					<%
+						}
+					}
+						if(endPage<totalPage){
+					%>
+						<li><a href="mysite/board?defaultPage=<%=endPage+1%>">▶</a></li>
+					<%
+						}
+					%>
 					</ul>
 				</div>
 				<c:if test="${sessionScope.authUser != null}">
