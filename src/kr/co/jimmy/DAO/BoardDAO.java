@@ -36,40 +36,42 @@ public class BoardDAO {
 	}
 
 	// 게시판 리스트
-	public ArrayList<BoardVO> ListBoard() {
-		ArrayList<BoardVO> list = null;
+	public ArrayList<BoardVO> ListBoard(int startListBoard, int endListBoard) {
 		ConnectionManager mgr = new ConnectionManager();
 		Connection con = mgr.getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
+		ArrayList<BoardVO> list = null;
 		BoardVO vo = null;
-
-		String sql = "SELECT b.no, b.title, u.name, b.hit, b.reg_date, b.user_no "
-					+ "FROM board b, users u "
-					+ "WHERE u.no = b.user_no "
-					+ "ORDER BY b.no DESC";
-
+		
+		String sql = "SELECT x.no, x.title, x.name, x.hit, x.reg_date, x.user_no " + 
+					 "FROM (SELECT rownum as num, a.no, a.title, a.name, a.hit, a.reg_date, a.user_no " + 
+					 	"FROM (SELECT b.no, b.title, u.name, b.hit, b.reg_date, b.user_no " + 
+					 		"FROM board b, users u " + 
+					 		"WHERE u.no = b.user_no " + 
+					 		"ORDER BY b.no DESC) a " + 
+					 	"WHERE rownum <= ?) x " + 
+					 "WHERE x.num >= ?";
 		try {
 			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, endListBoard);
+			pstmt.setInt(2, startListBoard);
 			rs = pstmt.executeQuery();
 			list = new ArrayList<BoardVO>();
-
-			while (rs.next()) {
+			while(rs.next()) {
+				
 				vo = new BoardVO();
-				vo.setNumber(rs.getInt("no"));
-				vo.setTitle(rs.getString("title"));
-				vo.setUser_name(rs.getString("name"));
-				vo.setHit(rs.getInt("hit"));
-				vo.setReg_date(rs.getString("reg_date"));
-				vo.setUser_no(rs.getInt("user_no"));
+				vo.setNumber(rs.getInt(1));
+				vo.setTitle(rs.getString(2));
+				vo.setUser_name(rs.getString(3));
+				vo.setHit(rs.getInt(4));
+				vo.setReg_date(rs.getString(5));
 				list.add(vo);
 			}
 		} catch (SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} finally {
-			mgr.ConnectionClose(con, pstmt, rs);
 		}
-
 		return list;
 	}
 	
@@ -269,8 +271,8 @@ public class BoardDAO {
 		}
 	}
 	
-	//페이징 처리
-	public int PagingBoard() {
+	// Board Count
+	public int CountBoard() {
 		ConnectionManager mgr = new ConnectionManager();
 		Connection con = mgr.getConnection();
 		PreparedStatement pstmt = null;
@@ -288,7 +290,8 @@ public class BoardDAO {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 		return 0;
 	}
+
+	
 }

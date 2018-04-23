@@ -15,10 +15,13 @@ import javax.websocket.SendResult;
 
 import org.omg.CORBA.BAD_INV_ORDER;
 
+import com.sun.webkit.WebPage;
+
 import kr.co.jimmy.DAO.BoardDAO;
 import kr.co.jimmy.DAO.MemberDAO;
 import kr.co.jimmy.VO.BoardVO;
 import kr.co.jimmy.VO.MemberVO;
+import kr.co.jimmy.util.WebPaging;
 
 @WebServlet("/board")
 public class BoardController extends HttpServlet {
@@ -145,10 +148,25 @@ public class BoardController extends HttpServlet {
 
 		else {
 			BoardDAO dao = new BoardDAO();
+			WebPaging paging = new WebPaging();
 			
-			ArrayList<BoardVO> list = dao.ListBoard();
+			int totalCount = dao.CountBoard(); // 총 게시물 수
 			
-			request.setAttribute("defaultPage", 2);
+			String num = request.getParameter("defalutPage");
+			
+			int totalPage = paging.totalPage(totalCount, Integer.parseInt(num));
+			int startListBoard = paging.StartListBoard(Integer.parseInt(num)); //시작 페이지 
+			int endListBoard = paging.endListBoard(startListBoard, totalPage); // 끝 페이지
+		
+			request.setAttribute("totalPage", totalPage);
+			request.setAttribute("startListBoard", startListBoard);
+			request.setAttribute("endListBoard", endListBoard);
+			
+			System.out.println(startListBoard);
+			System.out.println(endListBoard);
+			
+			ArrayList<BoardVO> list = dao.ListBoard(startListBoard, endListBoard);
+
 			request.setAttribute("boardList", list);
 			
 			url = "/WEB-INF/views/board/list.jsp";

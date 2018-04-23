@@ -89,9 +89,20 @@ WHERE b.title LIKE 'eee';
 
 UPDATE board SET hit = nvl(hit,0)+1 WHERE no LIKE 43;
 SELECT count(*) FROM board;
+
+SELECT x.no, x.title, x.name, x.hit, x.reg_date, x.user_no 
+					 FROM (SELECT rownum as num, a.no, a.title, a.name, a.hit, a.reg_date, a.user_no
+					 	FROM (SELECT b.no, b.title, u.name, b.hit, b.reg_date, b.user_no
+					 		FROM board b, users u 
+					 		WHERE u.no = b.user_no
+					 		ORDER BY b.no DESC) a
+					 	WHERE rownum <= 5) x 
+					WHERE x.num > 1;
+
 // Board end//
 
 // GuestBook start //
+
 CREATE TABLE guest_tbl(
 	no number PRIMARY KEY,
 	name VARCHAR2(80) not null,
