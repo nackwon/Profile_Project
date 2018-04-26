@@ -57,25 +57,19 @@
 				</table>
 				<div class="pager">
 					<ul>
-					<c:if test="${requestScope.totalPage > 5 }">
-						<li><a href="mysite/board?defaultPage=">◀</a></li>
+					<c:if test="${requestScope.totalPage > 5}">
+						<li><a href="mysite/board?defaultPage=${param.defaultPage - 1 }">◀</a></li>
 					</c:if>
-					<%-- 
-	
-						for(int i=startPage; i<endPage+1; i++){
-							
-							if(i == defaultPage){
-					%>
-						<li class="selected"><a href="mysite/board?defalutPage=<%=i%>"><%=i %></a></li>
-					<%
-						}else{
-					%>
-						<li><a href="mysite/board?defalutPage=<%=i%>"><%=i %></a>
-					<%
-						}
-					 --%>
+					
+					
+					<c:forEach begin="${requestScope.startListBoard}" end="${requestScope.endListBoard}" step="1">
+						<c:if test="${requestScope.startListBoard == param.defaultPage }">
+						</c:if>
+					</c:forEach> 
+					
+					
 					<c:if test="${requestScope.endListBoard < requestScope.totalPage }">
-							<li><a href="mysite/board?defaultPage=">▶</a></li>
+							<li><a href="mysite/board?defaultPage=${param.defaultPage + 1 }">▶</a></li>
 					</c:if>
 					</ul>
 				</div>
